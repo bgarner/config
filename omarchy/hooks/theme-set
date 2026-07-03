@@ -1,0 +1,78 @@
+#!/bin/bash
+# Dynamically generate a Starship palette from the active Omarchy theme's
+# colors.toml so every theme gets accurate colours. Starship re-reads
+# ~/.config/starship.toml on each prompt render, so the change takes
+# effect immediately without restarting the shell.
+
+COLORS_TOML="$HOME/.config/omarchy/current/theme/colors.toml"
+KITTY_CONF="$HOME/.config/omarchy/current/theme/kitty.conf"
+STARSHIP_CFG="$HOME/.config/starship.toml"
+
+[[ -f "$COLORS_TOML" || -f "$KITTY_CONF" ]] || exit 0
+
+# Extract from colors.toml  (key = "#rrggbb" format)
+get_color_toml() {
+  [[ -f "$COLORS_TOML" ]] || return
+  grep -E "^\s*${1}\s*=" "$COLORS_TOML" \
+    | sed -E "s/^\s*[^=]+=\s*[\"']([^\"']+)[\"'].*/\1/" \
+    | head -1
+}
+
+# Extract from kitty.conf  (key #rrggbb format)
+get_color_kitty() {
+  [[ -f "$KITTY_CONF" ]] || return
+  grep -E "^\s*${1}\s+#[0-9a-fA-F]" "$KITTY_CONF" \
+    | sed -E "s/^\s*\S+\s+(#[0-9a-fA-F]{6}).*/\1/" \
+    | head -1
+}
+
+# Try colors.toml first; fall back to kitty.conf
+get_color() {
+  local val
+  val=$(get_color_toml "$1")
+  [[ -z "$val" ]] && val=$(get_color_kitty "$1")
+  echo "$val"
+}
+
+color_fg0=$(get_color "foreground")
+color_bg1=$(get_color "background")
+color_bg3=$(get_color "color8")
+color_blue=$(get_color "color4")
+color_aqua=$(get_color "color14")
+color_green=$(get_color "color2")
+color_orange=$(get_color "color11")
+color_purple=$(get_color "color13")
+color_red=$(get_color "color1")
+color_yellow=$(get_color "color3")
+
+# Use Python to safely update starship.toml:
+#   1. Remove any existing [palettes.omarchy_current] block
+#   2. Set palette = 'omarchy_current'
+python3 - "$STARSHIP_CFG" <<'PYEOF'
+import re, sys
+path = sys.argv[1]
+with open(path) as f:
+    content = f.read()
+content = re.sub(r'\n?\[palettes\.omarchy_current\][^\[]*', '', content, flags=re.DOTALL)
+content = re.sub(r"^palette = '[^']*'", "palette = 'omarchy_current'", content, flags=re.MULTILINE)
+content = re.sub(r'\n{3,}', '\n\n', content)
+content = content.rstrip() + '\n'
+with open(path, 'w') as f:
+    f.write(content)
+PYEOF
+
+# Append the freshly generated palette block
+cat >> "$STARSHIP_CFG" << EOF
+
+[palettes.omarchy_current]
+color_fg0 = '${color_fg0}'
+color_bg1 = '${color_bg1}'
+color_bg3 = '${color_bg3}'
+color_blue = '${color_blue}'
+color_aqua = '${color_aqua}'
+color_green = '${color_green}'
+color_orange = '${color_orange}'
+color_purple = '${color_purple}'
+color_red = '${color_red}'
+color_yellow = '${color_yellow}'
+EOF

@@ -1,0 +1,107 @@
+# Deny files by default, but allow Git to traverse directories so explicit
+# file allowlist rules below can match nested paths.
+*
+!*/
+
+# Repo metadata and docs.
+!/.gitignore
+!/README.md
+
+# Omarchy / Hyprland core config.
+!/hypr/*.conf
+/hypr/monitors.conf
+
+!/waybar/**
+
+!/walker/config.toml
+
+!/swayosd/config.toml
+!/swayosd/style.css
+
+!/mako/**
+
+!/hyprland-preview-share-picker/config.yaml
+
+# Omarchy user hooks and lightweight local customization.
+!/omarchy/branding/
+!/omarchy/branding/*.txt
+!/omarchy/extensions/
+!/omarchy/extensions/*.sh
+!/omarchy/hooks/
+!/omarchy/hooks/**
+!/omarchy/current/
+/omarchy/current/*
+!/omarchy/current/theme.name
+
+# Terminals and shell.
+!/alacritty/alacritty.toml
+!/ghostty/config
+!/kitty/kitty.conf
+!/fish/config.fish
+!/tmux/tmux.conf
+!/starship.toml
+
+# CLI/TUI tools.
+!/btop/btop.conf
+!/fastfetch/config.jsonc
+!/git/config
+!/gh/config.yml
+!/lazydocker/config.yml
+!/lazygit/config.yml
+!/mise/config.toml
+!/nvim/**
+!/opencode/.gitignore
+!/opencode/opencode.json
+!/opencode/package.json
+!/opencode/bun.lock
+
+# Desktop integration.
+!/autostart/*.desktop
+!/environment.d/*.conf
+!/fontconfig/fonts.conf
+!/gtk-3.0/bookmarks
+!/gtk-4.0/servers
+!/imv/config
+!/mimeapps.list
+!/user-dirs.dirs
+!/user-dirs.locale
+!/uwsm/default
+!/uwsm/env
+!/wiremix/wiremix.toml
+!/xdg-terminals.list
+!/XCompose
+
+# Small application preferences that were reviewed before initial commit.
+!/Code/User/settings.json
+!/Code/User/keybindings.json
+!/Cursor/User/settings.json
+!/Cursor/User/keybindings.json
+!/brave-flags.conf
+!/chromium-flags.conf
+!/zed/
+!/zed/settings.json
+
+# Hard stops for common credentials/state if broader patterns are added later.
+/nvm/
+/omarchy/backgrounds/
+/omarchy/themes/
+**/hosts.yml
+**/*token*
+**/*Token*
+**/*auth*
+**/*Auth*
+**/*credential*
+**/*Credential*
+**/*cookie*
+**/*Cookie*
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+**/Local State
+**/Preferences
+**/Cache/**
+**/Code Cache/**
+**/GPUCache/**
+**/IndexedDB/**
+**/Local Storage/**
+**/Session Storage/**

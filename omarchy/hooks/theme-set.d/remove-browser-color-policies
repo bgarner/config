@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Let browser themes be managed inside Chromium/Chrome/Brave/Edge instead of
+# by Omarchy's managed BrowserThemeColor policy.
+rm -f \
+  /etc/chromium/policies/managed/color.json \
+  /etc/opt/chrome/policies/managed/color.json \
+  /etc/opt/edge/policies/managed/color.json \
+  /etc/brave/policies/managed/color.json
