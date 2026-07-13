@@ -1,2 +1,5 @@
-{   
+{
+    "editor.minimap.enabled": false,
+    "editor.suggestLineHeight": 2,
+    "editor.lineHeight": 2
 }
