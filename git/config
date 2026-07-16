@@ -5,6 +5,7 @@
 	br = branch
 	ci = commit
 	st = status
+	gone = !git fetch --prune && git branch -vv | awk '$1!=\"*\" && /: gone]/{print $1}' | xargs -r git branch -D
 [init]
 	defaultBranch = master
 [pull]
