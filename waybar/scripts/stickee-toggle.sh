@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+STICKEE_BIN="${STICKEE_BIN:-$HOME/dev/stickee/target/debug/stickee}"
+if [[ ! -x "$STICKEE_BIN" ]]; then
+  STICKEE_BIN="stickee"
+fi
+
 is_running() {
   pgrep -x stickee >/dev/null
 }
@@ -18,7 +23,7 @@ toggle() {
   if is_running; then
     pkill -x stickee
   else
-    uwsm-app -- stickee >/dev/null 2>&1 &
+    uwsm-app -- "$STICKEE_BIN" >/dev/null 2>&1 &
   fi
 
   pkill -RTMIN+11 waybar 2>/dev/null || true
