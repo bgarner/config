@@ -30,6 +30,9 @@
 [user]
 	name = Brent Garner
 	email = bgarner@gmail.com
-
+[includeIf "gitdir:~/dev/"]
+	path = ~/.config/git/personal
 [includeIf "gitdir:~/Work/"]
-	path = ~/.gitconfig-yeti
+	path = ~/.config/git/yeti
+[includeIf "gitdir:~/work/"]
+	path = ~/.config/git/yeti
